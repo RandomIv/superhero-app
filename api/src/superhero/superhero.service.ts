@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateSuperheroDto } from './dto/create-superhero.dto';
 import { UpdateSuperheroDto } from './dto/update-superhero.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { Superhero, Prisma } from '../generated/prisma/client';
+import { Superhero } from '../generated/prisma/client';
 import { PaginationQueryDto } from './dto/pagination-query.dto';
 import {
   SuperheroPreview,
