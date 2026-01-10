@@ -3,6 +3,12 @@ import { CreateSuperheroDto } from './dto/create-superhero.dto';
 import { UpdateSuperheroDto } from './dto/update-superhero.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { Superhero, Prisma } from '../generated/prisma/client';
+import { PaginationQueryDto } from './dto/pagination-query.dto';
+import {
+  SuperheroPreview,
+  superheroPreviewSelect,
+} from './types/superhero-preview.type';
+import { PaginatedResult } from './types/paginated-result.type';
 
 @Injectable()
 export class SuperheroService {
@@ -18,8 +24,25 @@ export class SuperheroService {
     });
   }
 
-  async findAll(): Promise<Superhero[]> {
-    return this.prisma.superhero.findMany({ include: { images: true } });
+  async findAll(
+    query: PaginationQueryDto,
+  ): Promise<PaginatedResult<SuperheroPreview>> {
+    const { limit = 5, page = 1 } = query;
+
+    const data = await this.prisma.superhero.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+      select: superheroPreviewSelect,
+      orderBy: { createdAt: 'asc' },
+    });
+    const total = await this.prisma.superhero.count();
+
+    return {
+      data,
+      total,
+      page,
+      lastPage: Math.ceil(total / limit),
+    };
   }
 
   async findOne(id: string): Promise<Superhero | null> {
@@ -31,6 +54,11 @@ export class SuperheroService {
 
   async update(id: string, data: UpdateSuperheroDto): Promise<Superhero> {
     const { images, ...heroData } = data;
+    if (images) {
+      await this.prisma.superheroImage.deleteMany({
+        where: { superheroId: id },
+      });
+    }
     return this.prisma.superhero.update({
       where: { id },
       data: { ...heroData, images: { create: images } },

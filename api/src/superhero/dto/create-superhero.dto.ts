@@ -1,5 +1,4 @@
 import { IsArray, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
-import { SuperheroImage } from '../../generated/prisma/client';
 import { Type } from 'class-transformer';
 import { Optional } from '@nestjs/common';
 

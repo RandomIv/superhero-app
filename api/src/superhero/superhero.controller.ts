@@ -7,10 +7,12 @@ import {
   Param,
   Delete,
   ParseUUIDPipe,
+  Query,
 } from '@nestjs/common';
 import { SuperheroService } from './superhero.service';
 import { CreateSuperheroDto } from './dto/create-superhero.dto';
 import { UpdateSuperheroDto } from './dto/update-superhero.dto';
+import { PaginationQueryDto } from './dto/pagination-query.dto';
 
 @Controller('superheroes')
 export class SuperheroController {
@@ -22,8 +24,8 @@ export class SuperheroController {
   }
 
   @Get()
-  findAll() {
-    return this.superheroService.findAll();
+  findAll(@Query() query: PaginationQueryDto) {
+    return this.superheroService.findAll(query);
   }
 
   @Get(':id')
