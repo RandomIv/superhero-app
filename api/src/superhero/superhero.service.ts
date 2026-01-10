@@ -45,8 +45,8 @@ export class SuperheroService {
     };
   }
 
-  async findOne(id: string): Promise<Superhero | null> {
-    return this.prisma.superhero.findUnique({
+  async findOne(id: string): Promise<Superhero> {
+    return this.prisma.superhero.findUniqueOrThrow({
       where: { id },
       include: { images: true },
     });
