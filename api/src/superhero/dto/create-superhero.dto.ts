@@ -1,12 +1,4 @@
-import { IsArray, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
-import { Optional } from '@nestjs/common';
-
-export class CreateSuperheroImageDto {
-  @IsNotEmpty()
-  @IsString()
-  imagePath: string;
-}
+import { IsArray, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateSuperheroDto {
   @IsNotEmpty()
@@ -29,9 +21,7 @@ export class CreateSuperheroDto {
   @IsString()
   catchPhrase: string;
 
-  @Optional()
   @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => CreateSuperheroImageDto)
-  images: CreateSuperheroImageDto[];
+  @IsString({ each: true })
+  images: string[];
 }
