@@ -18,7 +18,7 @@ export class SuperheroService {
     return this.prisma.superhero.create({
       data: {
         ...heroData,
-        images: { create: images },
+        images: { connect: images.map((id) => ({ id })) },
       },
       include: { images: true },
     });
@@ -54,14 +54,15 @@ export class SuperheroService {
 
   async update(id: string, data: UpdateSuperheroDto): Promise<Superhero> {
     const { images, ...heroData } = data;
-    if (images) {
-      await this.prisma.superheroImage.deleteMany({
-        where: { superheroId: id },
-      });
-    }
+
     return this.prisma.superhero.update({
       where: { id },
-      data: { ...heroData, images: { create: images } },
+      data: {
+        ...heroData,
+        images: {
+          set: images?.map((id) => ({ id })),
+        },
+      },
       include: { images: true },
     });
   }
