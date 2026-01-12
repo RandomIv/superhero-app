@@ -3,7 +3,6 @@
 import { useSuperheroes } from "@/hooks/useSuperheroes";
 import { Loader2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import HeroCard from "@/app/(dashboard)/_components/hero-card";
 import { Superhero } from "@/types";
 import {
@@ -62,7 +61,7 @@ export default function HeroList({
 
     return (
         <div className="flex flex-col gap-6">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                 {heroes.map((hero) => (
                     <HeroCard
                         key={hero.id}

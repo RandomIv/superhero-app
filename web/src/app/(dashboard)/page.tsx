@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useDeleteSuperhero, useCreateSuperhero, useUpdateSuperhero } from '@/hooks/useSuperheroes';
-import { Superhero, CreateSuperheroDto, UpdateSuperheroDto } from '@/types';
+import { CreateSuperheroDto, UpdateSuperheroDto } from '@/types';
 import HeroDetails from '@/app/(dashboard)/_components/hero-details';
 import HeroForm from '@/app/(dashboard)/_components/hero-form';
 import HeroList from "@/app/(dashboard)/_components/hero-list";
@@ -13,8 +13,8 @@ import { toast } from 'sonner';
 export default function Home() {
   const [page, setPage] = useState(1);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [viewingHero, setViewingHero] = useState<Superhero | null>(null);
-  const [editingHero, setEditingHero] = useState<Superhero | null>(null);
+  const [viewingId, setViewingId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const deleteHero = useDeleteSuperhero();
   const createHero = useCreateSuperhero();
@@ -23,7 +23,7 @@ export default function Home() {
   const handleDelete = async (id: string) => {
     try {
       await deleteHero.mutateAsync(id);
-      if (viewingHero?.id === id) setViewingHero(null);
+      if (viewingId === id) setViewingId(null);
       toast.success('Superhero deleted');
     } catch (error) {
       toast.error('Failed to delete superhero');
@@ -44,21 +44,20 @@ export default function Home() {
   const handleUpdate = async (id: string, payload: UpdateSuperheroDto) => {
     try {
       await updateHero.mutateAsync({ id, data: payload });
-      setEditingHero(null);
+      setEditingId(null);
       toast.success('Superhero updated');
     } catch (error) {
       toast.error('Failed to update superhero');
     }
   };
 
-  const openEditFromDetails = (hero: Superhero) => {
-    setViewingHero(null);
-    setEditingHero(hero);
+  const openEditFromDetails = (heroId: string) => {
+    setViewingId(null);
+    setEditingId(heroId);
   };
 
-  const isFormOpen = isCreateOpen || Boolean(editingHero);
-  const formMode = editingHero ? 'edit' : 'create';
-  const formHero = editingHero ?? undefined;
+  const isFormOpen = isCreateOpen || Boolean(editingId);
+  const formMode = editingId ? 'edit' : 'create';
 
   return (
       <main className="mx-auto flex min-h-screen max-w-6xl flex-col gap-6 px-4 py-8">
@@ -75,27 +74,27 @@ export default function Home() {
         <HeroList
             page={page}
             setPage={setPage}
-            onSelect={setViewingHero}
+            onSelect={(hero) => setViewingId(hero.id)}
             onDelete={handleDelete}
             isDeletingId={deleteHero.isPending ? deleteHero.variables : null}
         />
 
         <HeroDetails
-            hero={viewingHero}
-            open={Boolean(viewingHero)}
-            onClose={() => setViewingHero(null)}
+            heroId={viewingId}
+            open={Boolean(viewingId)}
+            onClose={() => setViewingId(null)}
             onEdit={openEditFromDetails}
-            onDelete={(id) => handleDelete(id)}
+            onDelete={handleDelete}
         />
 
         <HeroForm
             open={isFormOpen}
             mode={formMode}
-            hero={formHero}
+            heroId={editingId}
             onOpenChange={(open) => {
               if (!open) {
                 setIsCreateOpen(false);
-                setEditingHero(null);
+                setEditingId(null);
               }
             }}
             onCreate={handleCreate}

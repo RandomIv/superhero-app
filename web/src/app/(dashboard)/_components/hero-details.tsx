@@ -1,91 +1,152 @@
 'use client';
 
 import Image from 'next/image';
-import { BadgeCheck, Pencil, Trash2 } from 'lucide-react';
-import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { Pencil, Trash2, Zap, Loader2 } from 'lucide-react';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Superhero } from '@/types';
 import { getImageUrl } from '@/lib/utils';
+import { useSuperhero } from '@/hooks/useSuperheroes';
 
 interface HeroDetailsProps {
-  hero: Superhero | null;
+  heroId: string | null;
   open: boolean;
   onClose: () => void;
-  onEdit: (hero: Superhero) => void;
+  onEdit: (heroId: string) => void;
   onDelete: (id: string) => void;
 }
 
-export default function HeroDetails({ hero, open, onClose, onEdit, onDelete }: HeroDetailsProps) {
-  const images = hero?.images?.length ? hero.images : [];
+export default function HeroDetails({ heroId, open, onClose, onEdit, onDelete }: HeroDetailsProps) {
+  const { data: hero, isLoading } = useSuperhero(heroId);
+
+  if (!heroId) return null;
 
   return (
-      <Sheet open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-        <SheetContent side="right" className="w-full max-w-xl p-0">
-          <SheetHeader className="border-b p-4">
-            <SheetTitle className="text-2xl font-bold leading-tight">{hero?.nickname}</SheetTitle>
-            <p className="text-sm text-muted-foreground">{hero?.realName}</p>
-          </SheetHeader>
-
-          <ScrollArea className="h-[calc(100vh-200px)]">
-            <div className="space-y-6 p-4">
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {images.map((img) => (
-                    <div key={img.id} className="relative aspect-video overflow-hidden rounded-lg border bg-muted">
-                      <Image
-                          src={getImageUrl(img.imagePath)}
-                          alt={hero?.nickname || 'Superhero image'}
-                          fill
-                          className="object-cover"
-                          unoptimized
-                      />
-                    </div>
-                ))}
-                {!images.length && (
-                    <div className="relative aspect-video overflow-hidden rounded-lg border bg-muted flex items-center justify-center text-muted-foreground">
-                      No images
-                    </div>
-                )}
+      <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
+        <DialogContent className="flex max-h-[90vh] flex-col gap-0 overflow-hidden border-0 p-0 sm:max-w-4xl text-white">
+          {isLoading ? (
+            <>
+              <DialogTitle className="sr-only">Loading Hero Details</DialogTitle>
+              <div className="flex items-center justify-center p-12">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
               </div>
+            </>
+          ) : hero ? (
+            <>
+              <div className="relative flex min-h-40 flex-col justify-end bg-slate-950 p-8 text-white">
+                <div className="flex items-end justify-between gap-4">
+                  <div className="space-y-1">
+                    <DialogTitle className="text-3xl font-bold tracking-tight text-white md:text-4xl">
+                      {hero.nickname}
+                    </DialogTitle>
+                    <DialogDescription className="text-lg font-medium text-slate-400">
+                      {hero.realName}
+                    </DialogDescription>
+                  </div>
 
-              <div className="space-y-2">
-                <h4 className="text-sm font-semibold uppercase text-muted-foreground">Catch phrase</h4>
-                <p className="rounded-lg bg-muted p-3 text-sm italic">{hero?.catchPhrase}</p>
-              </div>
-
-              <div className="space-y-2">
-                <h4 className="text-sm font-semibold uppercase text-muted-foreground">Origin</h4>
-                <p className="text-sm text-foreground">{hero?.originDescription}</p>
-              </div>
-
-              <div className="space-y-3">
-                <h4 className="text-sm font-semibold uppercase text-muted-foreground">Superpowers</h4>
-                <div className="flex flex-wrap gap-2">
-                  {(hero?.superpowers || []).map((power) => (
-                      <Badge key={power} variant="secondary" className="gap-1">
-                        <BadgeCheck className="h-3 w-3" />
-                        {power}
-                      </Badge>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </ScrollArea>
-
-          {hero && (
-              <SheetFooter className="border-t p-4">
-                <div className="flex w-full items-center justify-between gap-3">
-                  <Button variant="destructive" size="sm" onClick={() => onDelete(hero.id)}>
-                    <Trash2 className="mr-2 h-4 w-4" /> Delete
-                  </Button>
-                  <Button size="sm" onClick={() => onEdit(hero)}>
-                    <Pencil className="mr-2 h-4 w-4" /> Edit Superhero
+                  <Button
+                      onClick={() => onEdit(hero.id)}
+                      variant="secondary"
+                      size="sm"
+                      className="hidden gap-2 font-medium sm:flex"
+                  >
+                    <Pencil className="h-4 w-4" /> Edit Hero
                   </Button>
                 </div>
-              </SheetFooter>
-          )}
-        </SheetContent>
-      </Sheet>
+              </div>
+
+              <ScrollArea className="max-h-[calc(90vh-180px)] w-full bg-slate-50">
+                <div className="flex flex-col gap-8 p-8">
+                  <div className="relative rounded-lg bg-slate-200/50 px-6 py-5">
+                    <div className="absolute left-0 top-0 bottom-0 w-1.5 rounded-l-lg bg-slate-900" />
+                    <p className="font-serif text-lg italic text-slate-700">
+                      &ldquo;{hero.catchPhrase}&rdquo;
+                    </p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <SectionHeader title="Origin Story" />
+                    <p className="text-base leading-relaxed text-slate-600">
+                      {hero.originDescription}
+                    </p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <SectionHeader title="Superpowers" />
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                      {hero.superpowers?.length ? (
+                          hero.superpowers.map((power) => (
+                              <div
+                                  key={power}
+                                  className="flex items-center gap-3 rounded-md bg-slate-200/60 px-4 py-3 text-sm font-medium text-slate-800 transition-colors hover:bg-slate-200"
+                              >
+                                <Zap className="h-4 w-4 text-slate-500" />
+                                {power}
+                              </div>
+                          ))
+                      ) : (
+                          <p className="text-sm text-slate-400 italic">No superpowers listed.</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <SectionHeader title="Gallery" />
+                    <ScrollArea className="max-h-[400px] w-full">
+                      <div className="grid grid-cols-2 gap-3 pr-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                        {(hero.images || []).map((img) => (
+                            <div
+                                key={img.id}
+                                className="group relative aspect-square overflow-hidden rounded-lg bg-slate-200 shadow-sm"
+                            >
+                              <Image
+                                  src={getImageUrl(img.imagePath)}
+                                  alt={hero.nickname}
+                                  fill
+                                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                  unoptimized
+                              />
+                            </div>
+                        ))}
+                        {!(hero.images || []).length && (
+                            <div className="col-span-full flex h-32 items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-100 text-slate-400">
+                              No images available
+                            </div>
+                        )}
+                      </div>
+                    </ScrollArea>
+                  </div>
+
+                  <div className="flex flex-col gap-3 pt-4 sm:flex-row sm:justify-between">
+                    <Button
+                        variant="destructive"
+                        className="w-full sm:w-auto"
+                        onClick={() => onDelete(hero.id)}
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" /> Delete Superhero
+                    </Button>
+                    <Button
+                        onClick={() => onEdit(hero.id)}
+                        variant="outline"
+                        className="w-full sm:hidden"
+                    >
+                      <Pencil className="mr-2 h-4 w-4" /> Edit Hero
+                    </Button>
+                  </div>
+                </div>
+              </ScrollArea>
+            </>
+          ) : null}
+        </DialogContent>
+      </Dialog>
+  );
+}
+
+function SectionHeader({ title }: { title: string }) {
+  return (
+      <div className="flex items-center gap-3">
+        <div className="h-1 w-6 rounded-full bg-slate-900" />
+        <h3 className="text-lg font-bold text-slate-900">{title}</h3>
+      </div>
   );
 }
