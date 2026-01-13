@@ -41,7 +41,7 @@ cd superhero-app
 Create a `.env` file in the root directory from the example:
 
 ```bash
-cp .env.example .env
+cp .env.example .env && cp api/.env.example api/.env && cp web/.env.example web/.env
 ```
 
 3. **Run the application:**
