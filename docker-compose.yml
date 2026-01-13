@@ -31,7 +31,7 @@ services:
       - /app/node_modules
       - ./api/images:/app/images
       - /app/dist
-    command: sh -c "npx prisma migrate deploy && npm run start:dev"
+    command: sh -c "npx prisma generate && npx prisma migrate deploy && npm run start:dev"
     restart: unless-stopped
 
   web:
