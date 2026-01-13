@@ -9,7 +9,7 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { getImageUrl } from '@/lib/utils';
+import { getImageUrl } from '@/lib/image-utils';
 import { useSuperhero } from '@/hooks/useSuperheroes';
 
 interface HeroDetailsProps {

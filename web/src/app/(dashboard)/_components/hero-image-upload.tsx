@@ -13,7 +13,7 @@ import {
 import { HeroFormValues } from '@/schemas/hero-form-schema';
 import { SuperheroImage } from '@/types';
 import { useUploadImage } from '@/hooks/useSuperheroes';
-import { getImageUrl } from '@/lib/utils';
+import { getImageUrl } from '@/lib/image-utils';
 
 interface HeroImageUploadProps {
   control: Control<HeroFormValues>;
