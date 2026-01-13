@@ -64,7 +64,14 @@ docker compose up --build
 
 Use this if you want to run the app locally but don't want to install PostgreSQL manually.
 
-#### 1. Database
+#### 1. Clone & Database
+
+**Clone the repository:**
+```bash
+git clone https://github.com/RandomIv/superhero-app.git
+cd superhero-app
+
+```
  **Setup Environment:**
 Create a `.env` file in the root directory from the example:
 ```bash
