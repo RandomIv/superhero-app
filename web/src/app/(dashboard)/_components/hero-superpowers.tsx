@@ -1,6 +1,12 @@
 import { Control } from 'react-hook-form';
 import { X } from 'lucide-react';
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { HeroFormValues } from '@/schemas/hero-form-schema';
@@ -50,14 +56,20 @@ export function HeroSuperpowers({ control }: HeroSuperpowersProps) {
                   {power}
                   <button
                     type="button"
-                    onClick={() => field.onChange(powers.filter((p) => p !== power))}
+                    onClick={() =>
+                      field.onChange(powers.filter((p) => p !== power))
+                    }
                     className="rounded-full p-1 hover:bg-muted focus:outline-none"
                   >
                     <X className="h-3 w-3" />
                   </button>
                 </Badge>
               ))}
-              {!powers.length && <p className="text-xs text-muted-foreground">No powers added yet.</p>}
+              {!powers.length && (
+                <p className="text-xs text-muted-foreground">
+                  No powers added yet.
+                </p>
+              )}
             </div>
             <FormMessage />
           </FormItem>
@@ -66,4 +78,3 @@ export function HeroSuperpowers({ control }: HeroSuperpowersProps) {
     />
   );
 }
-

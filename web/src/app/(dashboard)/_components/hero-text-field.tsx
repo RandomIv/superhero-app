@@ -1,5 +1,11 @@
 import { Control } from 'react-hook-form';
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { HeroFormValues } from '@/schemas/hero-form-schema';
 
@@ -10,7 +16,12 @@ interface HeroTextFieldProps {
   placeholder?: string;
 }
 
-export function HeroTextField({ control, name, label, placeholder }: HeroTextFieldProps) {
+export function HeroTextField({
+  control,
+  name,
+  label,
+  placeholder,
+}: HeroTextFieldProps) {
   return (
     <FormField
       control={control}
@@ -19,7 +30,11 @@ export function HeroTextField({ control, name, label, placeholder }: HeroTextFie
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Input placeholder={placeholder} {...field} value={field.value?.toString() || ''} />
+            <Input
+              placeholder={placeholder}
+              {...field}
+              value={field.value?.toString() || ''}
+            />
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -27,4 +42,3 @@ export function HeroTextField({ control, name, label, placeholder }: HeroTextFie
     />
   );
 }
-

@@ -14,7 +14,14 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { CreateSuperheroDto, UpdateSuperheroDto } from '@/types';
 import { formSchema, HeroFormValues } from '@/schemas/hero-form-schema';
 import { HeroTextField } from './hero-text-field';
@@ -31,8 +38,17 @@ interface HeroFormProps {
   onUpdate: (id: string, data: UpdateSuperheroDto) => void | Promise<void>;
 }
 
-export default function HeroForm({ open, mode, heroId, onOpenChange, onCreate, onUpdate }: HeroFormProps) {
-  const { data: hero, isLoading } = useSuperhero(mode === 'edit' && heroId ? heroId : null);
+export default function HeroForm({
+  open,
+  mode,
+  heroId,
+  onOpenChange,
+  onCreate,
+  onUpdate,
+}: HeroFormProps) {
+  const { data: hero, isLoading } = useSuperhero(
+    mode === 'edit' && heroId ? heroId : null,
+  );
 
   const defaultValues: HeroFormValues = useMemo(
     () => ({
@@ -44,7 +60,7 @@ export default function HeroForm({ open, mode, heroId, onOpenChange, onCreate, o
       superpowers: hero?.superpowers || [],
       images: hero?.images || [],
     }),
-    [hero]
+    [hero],
   );
 
   const form = useForm<HeroFormValues>({
@@ -80,7 +96,9 @@ export default function HeroForm({ open, mode, heroId, onOpenChange, onCreate, o
           <DialogTitle className="text-2xl font-semibold">
             {mode === 'create' ? 'Create Superhero' : 'Edit Superhero'}
           </DialogTitle>
-          <DialogDescription>Fill out the hero details below.</DialogDescription>
+          <DialogDescription>
+            Fill out the hero details below.
+          </DialogDescription>
         </DialogHeader>
 
         {isLoading && mode === 'edit' ? (
@@ -89,16 +107,34 @@ export default function HeroForm({ open, mode, heroId, onOpenChange, onCreate, o
           </div>
         ) : (
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmitForm)} className="flex max-h-[70vh] flex-col">
+            <form
+              onSubmit={form.handleSubmit(handleSubmitForm)}
+              className="flex max-h-[70vh] flex-col"
+            >
               <div className="space-y-6 overflow-y-auto p-6">
                 <HeroImageUpload control={form.control} />
 
                 <div className="grid gap-4 md:grid-cols-2">
-                  <HeroTextField control={form.control} name="nickname" label="Nickname" placeholder="e.g. Thunderstrike" />
-                  <HeroTextField control={form.control} name="realName" label="Real Name" placeholder="e.g. Jane Doe" />
+                  <HeroTextField
+                    control={form.control}
+                    name="nickname"
+                    label="Nickname"
+                    placeholder="e.g. Thunderstrike"
+                  />
+                  <HeroTextField
+                    control={form.control}
+                    name="realName"
+                    label="Real Name"
+                    placeholder="e.g. Jane Doe"
+                  />
                 </div>
 
-                <HeroTextField control={form.control} name="catchPhrase" label="Catch Phrase" placeholder="e.g. To the skies!" />
+                <HeroTextField
+                  control={form.control}
+                  name="catchPhrase"
+                  label="Catch Phrase"
+                  placeholder="e.g. To the skies!"
+                />
 
                 <FormField
                   control={form.control}
@@ -107,7 +143,12 @@ export default function HeroForm({ open, mode, heroId, onOpenChange, onCreate, o
                     <FormItem>
                       <FormLabel>Origin Description</FormLabel>
                       <FormControl>
-                        <Textarea rows={4} placeholder="Describe the origin story" {...field} value={field.value || ''} />
+                        <Textarea
+                          rows={4}
+                          placeholder="Describe the origin story"
+                          {...field}
+                          value={field.value || ''}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -119,10 +160,20 @@ export default function HeroForm({ open, mode, heroId, onOpenChange, onCreate, o
 
               <DialogFooter className="border-t bg-card p-6">
                 <div className="flex w-full justify-between gap-3">
-                  <Button variant="outline" type="button" onClick={() => onOpenChange(false)}>
+                  <Button
+                    variant="outline"
+                    type="button"
+                    onClick={() => onOpenChange(false)}
+                  >
                     Cancel
                   </Button>
-                  <Button type="submit" disabled={form.formState.isSubmitting || (isLoading && mode === 'edit')}>
+                  <Button
+                    type="submit"
+                    disabled={
+                      form.formState.isSubmitting ||
+                      (isLoading && mode === 'edit')
+                    }
+                  >
                     {mode === 'create' ? 'Save' : 'Update'}
                   </Button>
                 </div>
