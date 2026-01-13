@@ -60,15 +60,24 @@ export default function Home() {
   const formMode = editingId ? 'edit' : 'create';
 
   return (
-      <main className="mx-auto flex min-h-screen max-w-6xl flex-col gap-6 px-4 py-8">
-        <header className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">SuperheroDB</h1>
-            <p className="text-sm text-muted-foreground">Manage your roster of heroes</p>
+      <main className="mx-auto flex min-h-screen max-w-7xl flex-col gap-8 px-4 py-8">
+        <header className="relative overflow-hidden rounded-2xl bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 px-8 py-10 shadow-xl">
+          <div className="absolute inset-0 bg-grid-white/5"></div>
+          <div className="relative flex items-center justify-between">
+            <div className="space-y-2">
+              <h1 className="text-4xl font-bold tracking-tight text-white md:text-5xl">
+                SuperheroDB
+              </h1>
+              <p className="text-lg text-slate-300">Manage your roster of heroes</p>
+            </div>
+            <Button
+              onClick={() => setIsCreateOpen(true)}
+              size="lg"
+              className="gap-2 shadow-lg bg-black hover:bg-white hover:text-black hover:cursor-pointer"
+            >
+              <Plus className="h-5 w-5" /> Create Superhero
+            </Button>
           </div>
-          <Button onClick={() => setIsCreateOpen(true)}>
-            <Plus className="mr-2 h-4 w-4" /> Create Superhero
-          </Button>
         </header>
 
         <HeroList
