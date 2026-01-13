@@ -15,36 +15,33 @@ interface HeroDetailsProps {
     onDelete: (id: string) => void;
 }
 
-export default function HeroDetails({
-                                        heroId,
-                                        open,
-                                        onClose,
-                                        onEdit,
-                                        onDelete,
-                                    }: HeroDetailsProps) {
+export default function HeroDetails({ heroId, open, onClose, onEdit, onDelete }: HeroDetailsProps) {
     const { data: hero, isLoading } = useSuperhero(heroId);
 
     if (!heroId && !open) return null;
 
     return (
         <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-            <DialogContent className="flex max-h-[90vh] flex-col gap-0 overflow-hidden border-0 p-0 text-white sm:max-w-4xl">
+            <DialogContent className="flex max-h-[90vh] flex-col gap-0 overflow-hidden border-0 p-0 sm:max-w-4xl text-white">
+                <DialogTitle className="sr-only">Superhero Details</DialogTitle>
+
                 {isLoading ? (
                     <div className="flex h-64 items-center justify-center">
                         <Loader2 className="h-8 w-8 animate-spin text-primary" />
                     </div>
                 ) : hero ? (
                     <>
-                        <div className="relative flex min-h-40 flex-none flex-col justify-end bg-slate-950 p-8 text-white">
+                        <div className="flex-none relative flex min-h-40 flex-col justify-end bg-slate-950 p-8 text-white">
                             <div className="flex items-end justify-between gap-4">
                                 <div className="space-y-1">
-                                    <DialogTitle className="text-3xl font-bold tracking-tight text-white md:text-4xl">
+                                    <h2 className="text-3xl font-bold tracking-tight text-white md:text-4xl">
                                         {hero.nickname}
-                                    </DialogTitle>
+                                    </h2>
                                     <DialogDescription className="text-lg font-medium text-slate-400">
                                         {hero.realName}
                                     </DialogDescription>
                                 </div>
+
                                 <Button
                                     onClick={() => onEdit(hero.id)}
                                     variant="secondary"
@@ -59,7 +56,7 @@ export default function HeroDetails({
                         <div className="flex-1 overflow-y-auto bg-slate-50">
                             <div className="flex flex-col gap-8 p-8">
                                 <div className="relative rounded-lg bg-slate-200/50 px-6 py-5">
-                                    <div className="absolute bottom-0 left-0 top-0 w-1.5 rounded-l-lg bg-slate-900" />
+                                    <div className="absolute left-0 top-0 bottom-0 w-1.5 rounded-l-lg bg-slate-900" />
                                     <p className="font-serif text-lg italic text-slate-700">
                                         &ldquo;{hero.catchPhrase}&rdquo;
                                     </p>
@@ -86,9 +83,7 @@ export default function HeroDetails({
                                                 </div>
                                             ))
                                         ) : (
-                                            <p className="text-sm italic text-slate-400">
-                                                No superpowers listed.
-                                            </p>
+                                            <p className="text-sm text-slate-400 italic">No superpowers listed.</p>
                                         )}
                                     </div>
                                 </div>
