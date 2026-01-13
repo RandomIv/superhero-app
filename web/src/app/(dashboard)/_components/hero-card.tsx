@@ -6,7 +6,7 @@ import { Trash2 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Superhero } from '@/types';
-import { getImageUrl } from '@/lib/utils';
+import { getImageUrl } from '@/lib/image-utils';
 
 interface HeroCardProps {
   hero: Superhero;
