@@ -32,16 +32,16 @@ You can run the project in two ways: using **Docker** (recommended) or **Manuall
 *Fastest way to see the app in action. No Node.js or Postgres required locally.*
 
 1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/RandomIv/superhero-app.git
-   cd superhero-app
+```bash
+git clone https://github.com/RandomIv/superhero-app.git
+cd superhero-app
 
 ```
 2. **Setup Environment:**
 Create a `.env` file in the root directory from the example:
+
 ```bash
 cp .env.example .env
-
 ```
 
 3. **Run the application:**
