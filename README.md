@@ -46,15 +46,14 @@ cp .env.example .env
 
 3. **Run the application:**
 ```bash
-docker-compose up --build
+docker compose up --build
 
 ```
-
+*Note: Use docker-compose with a hyphen if you are on an older Docker version.*
 
 4. **Access the App:**
 * **Frontend:** [http://localhost:3000](https://www.google.com/search?q=http://localhost:3000)
 * **Backend API:** [http://localhost:5000](https://www.google.com/search?q=http://localhost:5000)
-
 
 
 *Note: Database migrations are applied automatically on container startup.*
@@ -63,7 +62,7 @@ docker-compose up --build
 
 ### 🛠️ Option 2: Manual Setup (Local Development)
 
-Use this if you want to run the app locally (e.g., for debugging) but don't want to install PostgreSQL manually.
+Use this if you want to run the app locally but don't want to install PostgreSQL manually.
 
 #### 1. Database
  **Setup Environment:**
@@ -74,8 +73,8 @@ cp .env.example .env
 You don't need to install PostgreSQL system-wide. Just spin up the database container from this project:
 
 ```bash
-# Starts only the database in the background
-docker-compose up -d db
+# Starts only the database in the background(docker-compose can be used also)
+docker compose up -d db
 
 ```
 
