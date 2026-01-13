@@ -69,8 +69,10 @@ export default function HeroForm({
   });
 
   useEffect(() => {
-    form.reset(defaultValues);
-  }, [defaultValues, form]);
+    if (open) {
+      form.reset(defaultValues);
+    }
+  }, [defaultValues, form, open]);
 
   const handleSubmitForm = async (values: HeroFormValues) => {
     const payload: CreateSuperheroDto = {
